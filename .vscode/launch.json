@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "[ANDROID] Launch to connected device",
+      "request": "launch",
+      "cwd": "layrz_location_android/example",
+      "type": "dart"
+    },
+    {
+      "name": "[IOS] Launch to connected device",
+      "request": "launch",
+      "cwd": "layrz_location_ios/example",
+      "type": "dart"
+    }, 
+    {
+      "name": "[General] Launch to connected device",
+      "request": "launch",
+      "cwd": "layrz_location/example",
+      "type": "dart",
+    }
+  ]
+}

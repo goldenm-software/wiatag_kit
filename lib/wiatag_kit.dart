@@ -11,19 +11,27 @@ part 'src/platform_interface.dart';
 part 'src/method_channel.dart';
 
 class WiatagKit {
-  Future<bool?> setServer(Server server) {
+  Future<bool?> setServer(WiatagServer server) {
     return WiatagKitPlatform.instance.setServer(server);
   }
 
-  Future<Server?> getServer() {
+  Future<WiatagServer?> getServer() {
     return WiatagKitPlatform.instance.getServer();
   }
 
-  Future<bool?> sendMessage(Message message) {
+  Future<bool?> sendMessage(WiatagMessage message) {
     return WiatagKitPlatform.instance.sendMessage(message);
   }
 
-  Future<bool?> senSos() {
-    return WiatagKitPlatform.instance.senSos();
+  Future<bool?> senSos([WiatagMessage? message]) {
+    return WiatagKitPlatform.instance.senSos(message);
+  }
+
+  Future<bool?> sendText(String text, [WiatagMessage? message]) {
+    return WiatagKitPlatform.instance.sendText(text, message);
+  }
+
+  void addListener(void Function(WiatagCommand) listener) {
+    WiatagKitPlatform.instance.addListener(listener);
   }
 }

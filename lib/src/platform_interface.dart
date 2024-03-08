@@ -7,27 +7,47 @@ class MethodChannelWiatagKit extends WiatagKitPlatform {
   final methodChannel = const MethodChannel('wiatag_kit');
 
   @override
-  Future<bool?> setServer(Server server) {
+  Future<bool?> setServer(WiatagServer server) {
     return methodChannel.invokeMethod<bool>('setServer', server.toJson());
   }
 
   @override
-  Future<Server?> getServer() async {
+  Future<WiatagServer?> getServer() async {
     try {
       final json = Map<String, dynamic>.from(await methodChannel.invokeMethod<Map>('getServer') ?? {});
-      return Server.fromJson(json);
+      return WiatagServer.fromJson(json);
     } catch (e) {
       return null;
     }
   }
 
   @override
-  Future<bool?> sendMessage(Message message) {
-    throw UnimplementedError('sendMessage() has not been implemented.');
+  Future<bool?> sendMessage(WiatagMessage message) {
+    return methodChannel.invokeMethod<bool>('sendMessage', message.toJson());
   }
 
   @override
-  Future<bool?> senSos() {
-    return methodChannel.invokeMethod<bool>('senSos');
+  Future<bool?> senSos([WiatagMessage? message]) {
+    return methodChannel.invokeMethod<bool>('senSos', message?.toJson());
+  }
+
+  @override
+  Future<bool?> sendText(String text, [WiatagMessage? message]) {
+    return methodChannel.invokeMethod<bool>('sendText', {'text': text, 'message': message?.toJson()});
+  }
+
+  @override
+  void addListener(void Function(WiatagCommand) listener) {
+    methodChannel.setMethodCallHandler((call) async {
+      debugPrint("WiatagKit: ${call.method} ${call.arguments}");
+      for (WiatagCommandType type in WiatagCommandType.values) {
+        if (type.name == call.method) {
+          final msg = Map<String, dynamic>.from(call.arguments);
+          msg['type'] = type.name;
+          listener(WiatagCommand.fromJson(msg));
+          break;
+        }
+      }
+    });
   }
 }

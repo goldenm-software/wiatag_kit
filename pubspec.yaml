@@ -1,6 +1,8 @@
 name: wiatag_kit
 description: "A new Flutter plugin project."
 version: 1.0.0
+repository: https://github.com/goldenm-software/wiatag_kit
+homepage: https://developers.layrz.com/components/dart-flutter/wiatag_kit
 
 
 environment:

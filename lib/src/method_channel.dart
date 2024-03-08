@@ -21,19 +21,27 @@ abstract class WiatagKitPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<bool?> setServer(Server server) {
+  Future<bool?> setServer(WiatagServer server) {
     throw UnimplementedError('setServer() has not been implemented.');
   }
 
-  Future<Server?> getServer() {
+  Future<WiatagServer?> getServer() {
     throw UnimplementedError('getServer() has not been implemented.');
   }
 
-  Future<bool?> sendMessage(Message message) {
+  Future<bool?> sendMessage(WiatagMessage message) {
     throw UnimplementedError('sendMessage() has not been implemented.');
   }
 
-  Future<bool?> senSos() {
+  Future<bool?> senSos([WiatagMessage? message]) {
     throw UnimplementedError('senSos() has not been implemented.');
+  }
+
+  Future<bool?> sendText(String text, [WiatagMessage? message]) {
+    throw UnimplementedError('sendText() has not been implemented.');
+  }
+
+  void addListener(void Function(WiatagCommand) listener) {
+    throw UnimplementedError('addListener() has not been implemented.');
   }
 }
