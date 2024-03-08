@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             const Text("Send SOS"),
             ElevatedButton(
               onPressed: () async {
-                await _plugin.senSos();
+                await _plugin.sendSos();
               },
               child: const Text("Send SOS"),
             ),
@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             const Text("Send SOS with info"),
             ElevatedButton(
               onPressed: () async {
-                await _plugin.senSos(message.copyWith(
+                await _plugin.sendSos(message.copyWith(
                   extra: {"last.will": "HELP ME!"},
                 ));
               },

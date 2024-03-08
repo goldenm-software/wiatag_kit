@@ -27,13 +27,13 @@ class MethodChannelWiatagKit extends WiatagKitPlatform {
   }
 
   @override
-  Future<bool?> senSos([WiatagMessage? message]) {
-    return methodChannel.invokeMethod<bool>('senSos', message?.toJson());
+  Future<bool?> sendSos([WiatagMessage? message]) {
+    return methodChannel.invokeMethod<bool>('sendSos', message?.toJson());
   }
 
   @override
   Future<bool?> sendText(String text, [WiatagMessage? message]) {
-    return methodChannel.invokeMethod<bool>('sendText', {'text': text, 'message': message?.toJson()});
+    return methodChannel.invokeMethod<bool>('sendText', {'text': text, 'message': message?.toJson() ?? {}});
   }
 
   @override

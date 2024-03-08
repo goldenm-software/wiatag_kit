@@ -132,8 +132,8 @@ class WiatagKitPlugin: FlutterPlugin, MethodCallHandler {
       "sendMessage" -> {
         sendMessage(args = call.arguments as HashMap<String, Any>, result = result)
       }
-      "senSos" -> {
-        senSos(args = call.arguments as HashMap<String, Any>?, result = result)
+      "sendSos" -> {
+        sendSos(args = call.arguments as HashMap<String, Any>?, result = result)
       }
         "sendText" -> {
             sendText(args = call.arguments as HashMap<String, Any>, result = result)
@@ -204,7 +204,7 @@ class WiatagKitPlugin: FlutterPlugin, MethodCallHandler {
       result.success(true)
   }
 
-  private fun senSos(args:HashMap<String, Any>?, result: Result) {
+  private fun sendSos(args:HashMap<String, Any>?, result: Result) {
       val msg = composeMessage(args = args)
       msg.sos()
       MessageManager.sendMessage(msg, SenderListener())

@@ -23,8 +23,8 @@ class WiatagKit {
     return WiatagKitPlatform.instance.sendMessage(message);
   }
 
-  Future<bool?> senSos([WiatagMessage? message]) {
-    return WiatagKitPlatform.instance.senSos(message);
+  Future<bool?> sendSos([WiatagMessage? message]) {
+    return WiatagKitPlatform.instance.sendSos(message);
   }
 
   Future<bool?> sendText(String text, [WiatagMessage? message]) {

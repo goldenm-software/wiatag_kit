@@ -33,8 +33,8 @@ abstract class WiatagKitPlatform extends PlatformInterface {
     throw UnimplementedError('sendMessage() has not been implemented.');
   }
 
-  Future<bool?> senSos([WiatagMessage? message]) {
-    throw UnimplementedError('senSos() has not been implemented.');
+  Future<bool?> sendSos([WiatagMessage? message]) {
+    throw UnimplementedError('sendSos() has not been implemented.');
   }
 
   Future<bool?> sendText(String text, [WiatagMessage? message]) {

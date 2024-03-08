@@ -1,0 +1,40 @@
+PODS:
+  - CocoaAsyncSocket (7.6.5)
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - wiatag_kit (0.0.1):
+    - CocoaAsyncSocket
+    - Flutter
+    - WiaTagKit
+  - WiaTagKit (0.60):
+    - CocoaAsyncSocket (~> 7.6)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - wiatag_kit (from `.symlinks/plugins/wiatag_kit/ios`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaAsyncSocket
+    - WiaTagKit
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  wiatag_kit:
+    :path: ".symlinks/plugins/wiatag_kit/ios"
+
+SPEC CHECKSUMS:
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  wiatag_kit: 811835bc53c37a96a3397abaec64a5f8edbdc8d1
+  WiaTagKit: 691173ce036f8844c2131c8e759bac5d75ff42e7
+
+PODFILE CHECKSUM: 8f9f1f8bf0eb00f992d5c9c4f982942fb0e006ca
+
+COCOAPODS: 1.14.3
