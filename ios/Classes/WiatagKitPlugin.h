@@ -1,5 +1,5 @@
 #import <Flutter/Flutter.h>
-#import "WiaTagSendingLib.h"
+#import "WiaTagSending.h"
 
 @interface WiatagKitPlugin : NSObject<FlutterPlugin>
 @end

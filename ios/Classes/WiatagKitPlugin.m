@@ -8,11 +8,12 @@ NSString *PASSWORD = @"";
 int COMMAND_SYNC = 30;
 BOOL HAS_COMMANDS = YES;
 WTMessageManager *SENDER;
+NSTimer *COMMAND_TIMER;
+FlutterMethodChannel* channel;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"wiatag_kit"
-            binaryMessenger:[registrar messenger]];
+  channel = [FlutterMethodChannel methodChannelWithName:@"wiatag_kit"
+                                        binaryMessenger:[registrar messenger]];
   WiatagKitPlugin* instance = [[WiatagKitPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
 }
@@ -49,6 +50,107 @@ WTMessageManager *SENDER;
     
     // Start WiaTag Service
     SENDER = [[WTMessageManager alloc] initWithHost:HOST port:[PORT unsignedLongValue] deviceId:UNIT_ID password:PASSWORD];
+    
+    if (HAS_COMMANDS) {
+        [SENDER enableRemoteControl:YES andEnableChat:YES completion: ^(NSError * _Nullable error) {
+            NSLog(@"Error enabling services: %@", error);
+        }];
+        
+        [SENDER
+         addListener: ^(WTTextMessage * _Nullable message) {
+            if (message == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": message.identifier,
+                @"message": message.body,
+            };
+            
+            [channel invokeMethod: @"chatMessageReceived" arguments: payload];
+        }
+         locationCoordinateHandler: ^(WTLocationCoordinate * _Nullable location) {
+            NSLog(@"Unsupported location command");
+        }
+         torchHandler: ^(WTTorch * _Nullable torch) {
+            if (torch == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": torch.identifier,
+                @"state": [NSNumber numberWithBool: torch.state],
+            };
+            
+            [channel invokeMethod: @"torch" arguments: payload];
+        }
+         serviceHandler:^(WTService * _Nullable service) {
+            if (service == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": service.identifier,
+                @"time": [NSNumber numberWithLong: service.time],
+            };
+            
+            if (service.state == WTServiceStateStop) {
+                [channel invokeMethod: @"stopServiceCommand" arguments: payload];
+            } else {
+                [channel invokeMethod: @"startServiceCommand" arguments: payload];
+            }
+        }
+         requestConfigHandler: ^(WTRequestConfig * _Nullable config) {
+            if (config == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": config.identifier,
+            };
+            
+            [channel invokeMethod: @"remoteConfigRequest" arguments: payload];
+        }
+         configHandler: ^(WTConfig * _Nullable config) {
+            if (config == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": config.identifier,
+                @"messageData": [config.settings description],
+            };
+            
+            [channel invokeMethod: @"receiveConfigCommand" arguments: payload];
+        }
+         requestLocationHandler: ^(WTRequestLocation * _Nullable location) {
+            if (location == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": location.identifier,
+            };
+            
+            [channel invokeMethod: @"getPosition"
+                        arguments: payload];
+        }
+         requestLogFileHandler: ^(WTRequestLogFile * _Nullable logFile) {
+            NSLog(@"Unsupported requestLogFile command");
+        }
+         customMessageHandler: ^(WTCustomMsg * _Nullable message) {
+            if (message == nil) return;
+            NSDictionary *payload = @{
+                @"commandId": message.identifier,
+                @"message": message.content,
+            };
+            
+            [channel invokeMethod: @"chatMessageReceived" arguments: payload];
+        }
+         requestPhotoHandler: ^(WTRequestPhoto * _Nullable photo) {
+            NSLog(@"Unsupported requestPhoto command");
+        }
+         requestPhotoFromCameraHandler: ^(WTRequestPhotoFromCamera * _Nullable service) {
+            NSLog(@"Unsupported requestPhotoFromCamera command");
+        }
+        ];
+        
+        COMMAND_TIMER = [NSTimer scheduledTimerWithTimeInterval:COMMAND_SYNC
+                                                         target:self
+                                                       selector:@selector(checkUpdates)
+                                                       userInfo:nil
+                                                        repeats:YES];
+    }
+}
+
+- (void)receiveTextMessage:(WTTextMessage * _Nullable)textMessage {
+    NSLog(@"Received text message");
+}
+
+- (void)receiveLocation:(WTLocationCoordinate * _Nullable)location {
+    NSLog(@"Received location");
 }
 
 - (void)getServer:(FlutterResult)result {
@@ -160,24 +262,29 @@ WTMessageManager *SENDER;
     
     [builder setLocation: location];
     
-//    NSNumber* batteryLevel = [args objectForKey: @"battery.level"];
-//    if (batteryLevel != nil) {
-//        [builder setBatteryLevel: batteryLevel];
-//    }
-//    
-//    NSString* driverMessage = [args objectForKey: @"driver.message"];
-//    if (driverMessage != nil) {
-//        [builder setText: driverMessage];
-//    }
-//    
-//    for (NSString* key in args) {
-//        id value = [args objectForKey: key];
-//
-//        if ([value isKindOfClass: [NSString class]]) {
-//            [builder addParam: key withText: value];
-//        } else if ([value isKindOfClass: [NSNumber class]]) {
-//            [builder addParam:key withFloatValue: value];
-//        }
-//    }
+    NSNumber* batteryLevel = [args objectForKey: @"battery.level"];
+    if (batteryLevel != nil) {
+        [builder setBatteryLevel: batteryLevel];
+    }
+    
+    NSString* driverMessage = [args objectForKey: @"driver.message"];
+    if (driverMessage != nil) {
+        [builder setText: driverMessage];
+    }
+    
+    for (NSString* key in args) {
+        id value = [args objectForKey: key];
+
+        if ([value isKindOfClass: [NSString class]]) {
+            [builder addParam: key withText: value];
+        } else if ([value isKindOfClass: [NSNumber class]]) {
+            [builder addParam:key withFloatValue: value];
+        }
+    }
+}
+
+- (void)checkUpdates {
+    NSLog(@"Checking if some commands are in queue");
+    [SENDER checkUpdates];
 }
 @end

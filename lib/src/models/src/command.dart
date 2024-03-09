@@ -22,7 +22,7 @@ enum WiatagCommandType {
   startServiceCommand,
   stopServiceCommand,
   getPosition,
-  sendSosCommand,
+  receiveConfigCommand,
   remoteConfigRequest,
   torch,
 }
@@ -41,8 +41,8 @@ class WiatagCommandTypeConverter implements JsonConverter<WiatagCommandType, Str
         return WiatagCommandType.stopServiceCommand;
       case 'getPosition':
         return WiatagCommandType.getPosition;
-      case 'sendSosCommand':
-        return WiatagCommandType.sendSosCommand;
+      case 'receiveConfigCommand':
+        return WiatagCommandType.receiveConfigCommand;
       case 'remoteConfigRequest':
         return WiatagCommandType.remoteConfigRequest;
       case 'torch':
@@ -63,8 +63,8 @@ class WiatagCommandTypeConverter implements JsonConverter<WiatagCommandType, Str
         return 'stopServiceCommand';
       case WiatagCommandType.getPosition:
         return 'getPosition';
-      case WiatagCommandType.sendSosCommand:
-        return 'sendSosCommand';
+      case WiatagCommandType.receiveConfigCommand:
+        return 'receiveConfigCommand';
       case WiatagCommandType.remoteConfigRequest:
         return 'remoteConfigRequest';
       case WiatagCommandType.torch:

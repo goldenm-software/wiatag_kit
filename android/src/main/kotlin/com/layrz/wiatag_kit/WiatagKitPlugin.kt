@@ -89,7 +89,7 @@ class WiatagKitPlugin: FlutterPlugin, MethodCallHandler {
 
     override fun remoteConfigReceive(commandId: String, messageData: String) {
       Log.i(TAG, "remoteConfigReceive: $commandId")
-      channel.invokeMethod("sendSosCommand", mapOf(
+      channel.invokeMethod("receiveConfigCommand", mapOf(
         "commandId" to commandId,
         "messageData" to messageData,
       ))
@@ -135,9 +135,9 @@ class WiatagKitPlugin: FlutterPlugin, MethodCallHandler {
       "sendSos" -> {
         sendSos(args = call.arguments as HashMap<String, Any>?, result = result)
       }
-        "sendText" -> {
-            sendText(args = call.arguments as HashMap<String, Any>, result = result)
-        }
+      "sendText" -> {
+        sendText(args = call.arguments as HashMap<String, Any>, result = result)
+      }
       else -> {
         result.notImplemented()
       }

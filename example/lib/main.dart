@@ -19,8 +19,11 @@ class _MyAppState extends State<MyApp> {
   WiatagServer get server => const WiatagServer(
         host: "nl.gpsgsm.org",
         port: 20963,
+        // host: '50189.flespi.gw',
+        // port: 26460,
         unitId: "wiatag_flutter",
         password: "",
+        commandListener: Duration(seconds: 5),
       );
 
   WiatagMessage get message => const WiatagMessage(
