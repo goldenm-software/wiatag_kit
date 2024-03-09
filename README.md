@@ -73,3 +73,7 @@ plugin.addListener((WiatagCommand command) {
   // Do something with the command
 });
 ```
+
+## Known issues
+- Commands may not work propertly when Flespi is the server.
+- Some command handlers in iOS are marked as not supported, we're working on it.
